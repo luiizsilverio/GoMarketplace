@@ -31,6 +31,13 @@ const CartProvider: React.FC = ({ children }) => {
   useEffect(() => {
     async function loadProducts(): Promise<void> {
       // TODO LOAD ITEMS FROM ASYNC STORAGE
+      const prods = await AsyncStorage.getItem('@goMaketplace:products');
+      console.log(prods);
+      if (prods) {
+        setProducts(JSON.parse(prods));
+      } else {
+        setProducts([] as Product[]);
+      }
     }
 
     loadProducts();
@@ -38,15 +45,55 @@ const CartProvider: React.FC = ({ children }) => {
 
   const addToCart = useCallback(async product => {
     // TODO ADD A NEW ITEM TO THE CART
-  }, []);
+    const p = products.findIndex((prod) => prod.id == product.id);
+
+    if (!product.quantity || product.quantity === 0) {
+      product.quantity = 1;
+    }
+
+    if (p >= 0) {
+      products[p].quantity++;
+      setProducts([...products]);
+    } else {
+      setProducts([...products, product]);
+    }
+
+    await AsyncStorage.setItem('@goMaketplace:products', JSON.stringify(products));
+
+  }, [products]);
 
   const increment = useCallback(async id => {
     // TODO INCREMENTS A PRODUCT QUANTITY IN THE CART
-  }, []);
+    const p = products.findIndex((prod) => prod.id == id);
+
+    if (p >= 0) {
+      products[p].quantity++;
+    }
+
+    setProducts([...products]);
+
+    await AsyncStorage.setItem('@goMaketplace:products', JSON.stringify(products));
+
+  }, [products]);
 
   const decrement = useCallback(async id => {
     // TODO DECREMENTS A PRODUCT QUANTITY IN THE CART
-  }, []);
+    let prods = products.map(prod => prod);
+    const p = prods.findIndex((prod) => prod.id == id);
+
+    if (p >= 0) {
+      prods[p].quantity--;
+      if (prods[p].quantity <= 0) {
+        prods[p].quantity = 0;
+        prods = prods.filter(prod => prod.id != id);
+      }
+    }
+
+    setProducts([...prods]);
+
+    await AsyncStorage.setItem('@goMaket]place:products', JSON.stringify(products));
+
+  }, [products]);
 
   const value = React.useMemo(
     () => ({ addToCart, increment, decrement, products }),

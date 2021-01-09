@@ -34,7 +34,7 @@ const CartProvider: React.FC = ({ children }) => {
       const prods = await AsyncStorage.getItem('@GoMaketplace:products');
       console.log(prods);
       if (prods) {
-        setProducts(JSON.parse(prods));
+        setProducts([...JSON.parse(prods)]);
       } else {
         setProducts([] as Product[]);
       }

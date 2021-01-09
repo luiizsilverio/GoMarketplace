@@ -31,7 +31,7 @@ const CartProvider: React.FC = ({ children }) => {
   useEffect(() => {
     async function loadProducts(): Promise<void> {
       // TODO LOAD ITEMS FROM ASYNC STORAGE
-      const prods = await AsyncStorage.getItem('@goMaketplace:products');
+      const prods = await AsyncStorage.getItem('@GoMaketplace:products');
       console.log(prods);
       if (prods) {
         setProducts(JSON.parse(prods));
@@ -58,7 +58,7 @@ const CartProvider: React.FC = ({ children }) => {
       setProducts([...products, product]);
     }
 
-    await AsyncStorage.setItem('@goMaketplace:products', JSON.stringify(products));
+    await AsyncStorage.setItem('@GoMaketplace:products', JSON.stringify(products));
 
   }, [products]);
 
@@ -72,7 +72,7 @@ const CartProvider: React.FC = ({ children }) => {
 
     setProducts([...products]);
 
-    await AsyncStorage.setItem('@goMaketplace:products', JSON.stringify(products));
+    await AsyncStorage.setItem('@GoMaketplace:products', JSON.stringify(products));
 
   }, [products]);
 
@@ -91,7 +91,7 @@ const CartProvider: React.FC = ({ children }) => {
 
     setProducts([...prods]);
 
-    await AsyncStorage.setItem('@goMaket]place:products', JSON.stringify(products));
+    await AsyncStorage.setItem('@GoMaketplace:products', JSON.stringify(products));
 
   }, [products]);
 
